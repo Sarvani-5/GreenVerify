@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏢 GRIHA Green Rating Predictor</title>
+    <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .form-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .form-grid::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .predict-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .prediction-result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #4CAF50;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stars {
+            font-size: 3rem;
+            margin: 15px 0;
+            color: #FFD700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .probabilities {
+            margin-top: 25px;
+        }
+
+        .probability-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .probability-item:last-child {
+            border-bottom: none;
+        }
+
+        .probability-bar {
+            width: 60%;
+            height: 6px;
+            background: #e1e5e9;
+            border-radius: 3px;
+            margin-left: 10px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d1edff;
+            color: #004085;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recommendations-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recommendations-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .recommendations-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .recommendations-section {
+            margin-top: 30px;
+            width: 100%;
+            grid-column: 1 / -1;
+        }
+
+        .recommendations-content {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e1e5e9;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .recommendations-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .recommendations-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .recommendations-content::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .recommendations-content h1,
+        .recommendations-content h2,
+        .recommendations-content h3 {
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        .recommendations-content strong {
+            color: #667eea;
+        }
+
+        .recommendations-content ul,
+        .recommendations-content ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .recommendations-content li {
+            margin: 5px 0;
+        }
+
+        .close-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #d1edff;
+            color: #004085;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-building"></i> GRIHA Green Rating Predictor</h1>
+            <p>Predict building sustainability ratings from 1 to 5 stars</p>
+        </div>
+
+        {% if model and feature_names %}
+            <div class="status-message">
+                <i class="fas fa-check-circle"></i> {{ train_status }}
+            </div>
+
+            <div class="main-content">
+                <div class="form-card">
+                    <h2 class="form-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Building Details
+                    </h2>
+                    <form id="predictionForm">
+                        <div class="form-grid">
+                            {% for feature in feature_names %}
+                                <div class="input-group">
+                                    <label for="{{ feature }}">{{ feature.replace('_', ' ').title() }}</label>
+                                    {% if feature in label_encoders %}
+                                        <select name="{{ feature }}" id="{{ feature }}" required>
+                                            <option value="">Select {{ feature.replace('_', ' ').title() }}</option>
+                                            {% for option in label_encoders[feature].classes_ %}
+                                                <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% else %}
+                                        <input type="number" step="any" name="{{ feature }}" id="{{ feature }}" 
+                                               placeholder="Enter {{ feature.replace('_', ' ').title() }}" value="0">
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="predict-btn" id="predictBtn">
+                            <span id="btnText"><i class="fas fa-magic"></i> Predict GRIHA Rating</span>
+                            <span id="btnLoading" class="hidden"><span class="loading"></span> Predicting...</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="results-card">
+                    <h2 class="results-title">
+                        <i class="fas fa-chart-line"></i>
+                        Assessment Results
+                    </h2>
+                    
+                    <div id="results" class="hidden">
+                        <div class="prediction-result" id="predictionText"></div>
+                        <div class="stars" id="starsDisplay"></div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceBar" style="width: 0%"></div>
+                        </div>
+                        <small id="confidenceText">Confidence: 0%</small>
+                        
+                        <div class="probabilities">
+                            <h3 style="margin-bottom: 15px; color: #555;">
+                                <i class="fas fa-percentage"></i> Probability Breakdown
+                            </h3>
+                            <div id="probabilityList"></div>
+                        </div>
+
+                        <!-- GreenyBot Recommendations Button -->
+                        <button id="getRecommendationsBtn" class="recommendations-btn" style="margin-top: 25px;">
+                            <span id="recBtnText"><i class="fas fa-robot"></i> Get GreenyBot Recommendations</span>
+                            <span id="recBtnLoading" class="hidden"><span class="loading"></span> GreenyBot is thinking...</span>
+                        </button>
+                    </div>
+
+                    <div id="alerts"></div>
+                    
+                    <div id="placeholder" style="color: #999; font-style: italic; margin-top: 50px;">
+                        <i class="fas fa-info-circle"></i><br>
+                        Fill in the building details and click "Predict" to see your GRIHA rating assessment.
+                    </div>
+                </div>
+            </div>
+
+            <!-- GreenyBot Recommendations Modal/Section -->
+            <div id="recommendationsSection" class="recommendations-section hidden">
+                <div class="form-card">
+                    <h2 class="form-title">
+                        <i class="fas fa-robot"></i>
+                        GreenyBot Recommendations
+                    </h2>
+                    <div id="recommendationsContent" class="recommendations-content">
+                        <!-- AI recommendations will be displayed here -->
+                    </div>
+                    <button id="closeRecommendations" class="close-btn">
+                        <i class="fas fa-times"></i> Close Recommendations
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                Error: Could not load the model. Please ensure 'green_building.csv' exists and is accessible.
+            </div>
+        {% endif %}
+    </div>
+    <!-- Floating GreenyBot Widget -->
+<div id="greenBotWidget" style="
+    position: fixed; bottom: 20px; right: 20px;
+    width: 350px; max-height: 500px;
+    background: white; border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: none; flex-direction: column; overflow: hidden;
+    z-index: 9999; font-family: 'Segoe UI', sans-serif;">
+    
+    <div style="background: linear-gradient(135deg,#667eea,#764ba2); color:white; padding:10px; font-weight:600; display:flex; justify-content:space-between; align-items:center;">
+        🌱 GreenyBot
+        <button onclick="toggleGreeny()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">×</button>
+    </div>
+    
+    <div id="greenBotMessages" style="flex:1; padding:10px; overflow-y:auto; font-size:0.9rem;"></div>
+    
+    <div style="padding:10px; display:flex; gap:5px; border-top:1px solid #ddd;">
+        <input type="text" id="greenBotInput" placeholder="Ask about your rating..." 
+               style="flex:1; padding:8px; border:1px solid #ccc; border-radius:8px;">
+        <button onclick="askGreeny()" 
+                style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">
+            Send
+        </button>
+    </div>
+</div>
+
+<!-- Floating Button -->
+<button onclick="toggleGreeny()" style="
+    position: fixed; bottom: 20px; right: 20px;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: white; border: none; border-radius: 50%;
+    width: 60px; height: 60px; font-size: 1.5rem; cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;">💬</button>
+
+    <script>
+        let currentInputs = {};
+        let currentPrediction = null;
+        let currentProbabilities = [];
+
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const predictBtn = document.getElementById('predictBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const results = document.getElementById('results');
+            const alerts = document.getElementById('alerts');
+            const placeholder = document.getElementById('placeholder');
+            
+            // Show loading state
+            predictBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            alerts.innerHTML = '';
+            
+            // Store form data for GreenyBot
+            const formData = new FormData(this);
+            currentInputs = {};
+            for (let [key, value] of formData.entries()) {
+                currentInputs[key] = value;
+            }
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.warning) {
+                    alerts.innerHTML = `<div class="alert alert-warning fade-in">
+                        <i class="fas fa-exclamation-triangle"></i> ${data.message}
+                    </div>`;
+                    results.classList.add('hidden');
+                    placeholder.style.display = 'block';
+                } else if (data.success) {
+                    // Store prediction data for GreenyBot
+                    currentPrediction = data.prediction;
+                    currentProbabilities = data.probabilities;
+                    
+                    // Show results
+                    const rating = parseInt(data.prediction);
+                    const stars = '⭐'.repeat(rating);
+                    
+                    document.getElementById('predictionText').textContent = `Rating: ${rating} Stars`;
+                    document.getElementById('starsDisplay').textContent = stars;
+                    
+                    const confidence = (data.confidence * 100).toFixed(1);
+                    document.getElementById('confidenceBar').style.width = confidence + '%';
+                    document.getElementById('confidenceText').textContent = `Confidence: ${confidence}%`;
+                    
+                    // Show probability breakdown
+                    const probabilityList = document.getElementById('probabilityList');
+                    probabilityList.innerHTML = '';
+                    
+                    data.probabilities.forEach(prob => {
+                        const percentage = (prob.probability * 100).toFixed(1);
+                        const stars = '⭐'.repeat(parseInt(prob.label));
+                        
+                        probabilityList.innerHTML += `
+                            <div class="probability-item">
+                                <span>${stars} ${prob.label} Stars</span>
+                                <div class="probability-bar">
+                                    <div class="probability-fill" style="width: ${percentage}%"></div>
+                                </div>
+                                <span>${percentage}%</span>
+                            </div>
+                        `;
+                    });
+                    
+                    results.classList.remove('hidden');
+                    results.classList.add('fade-in');
+                    placeholder.style.display = 'none';
+                } else if (data.error) {
+                    alerts.innerHTML = `<div class="alert alert-error fade-in">
+                        <i class="fas fa-times-circle"></i> ${data.error}
+                    </div>`;
+                    results.classList.add('hidden');
+                    placeholder.style.display = 'block';
+                }
+            } catch (error) {
+                alerts.innerHTML = `<div class="alert alert-error fade-in">
+                    <i class="fas fa-times-circle"></i> Network error: ${error.message}
+                </div>`;
+                results.classList.add('hidden');
+                placeholder.style.display = 'block';
+            }
+            
+            // Reset button state
+            predictBtn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        });
+
+        // GreenyBot Recommendations
+        document.getElementById('getRecommendationsBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const recBtn = document.getElementById('getRecommendationsBtn');
+            const recBtnText = document.getElementById('recBtnText');
+            const recBtnLoading = document.getElementById('recBtnLoading');
+            const recommendationsSection = document.getElementById('recommendationsSection');
+            const recommendationsContent = document.getElementById('recommendationsContent');
+            
+            // Show loading state
+            recBtn.disabled = true;
+            recBtnText.classList.add('hidden');
+            recBtnLoading.classList.remove('hidden');
+            
+            try {
+                const response = await fetch('/get_recommendations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        inputs: currentInputs,
+                        prediction: currentPrediction,
+                        probabilities: currentProbabilities
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Format and display recommendations
+                    const formattedRecommendations = formatMarkdownToHTML(data.recommendations);
+                    recommendationsContent.innerHTML = formattedRecommendations;
+                    
+                    // Show recommendations section
+                    recommendationsSection.classList.remove('hidden');
+                    recommendationsSection.classList.add('fade-in');
+                    
+                    // Scroll to recommendations
+                    recommendationsSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('GreenyBot Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+            
+            // Reset button state
+            recBtn.disabled = false;
+            recBtnText.classList.remove('hidden');
+            recBtnLoading.classList.add('hidden');
+        });
+
+        // Close recommendations
+        document.getElementById('closeRecommendations').addEventListener('click', function() {
+            document.getElementById('recommendationsSection').classList.add('hidden');
+        });
+
+        // Simple markdown to HTML formatter
+        function formatMarkdownToHTML(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/###\s+(.*?)$/gm, '<h3>$1</h3>')
+                .replace(/##\s+(.*?)$/gm, '<h2>$1</h2>')
+                .replace(/#\s+(.*?)$/gm, '<h1>$1</h1>')
+                .replace(/^\- (.*?)$/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+                .replace(/\n/g, '<br>');
+        }
+        function toggleGreeny() {
+    const widget = document.getElementById("greenBotWidget");
+    const launcher = document.getElementById("greenBotLauncher");
+    
+    if (widget.style.display === "none" || widget.style.display === "") {
+        widget.style.display = "flex";
+        launcher.style.display = "none"; // hide 💬 button
+    } else {
+        widget.style.display = "none";
+        launcher.style.display = "block"; // show 💬 button again
+    }
+}
+
+async function askGreeny() {
+    const input = document.getElementById("greenBotInput");
+    const msg = input.value.trim();
+    if (!msg) return;
+    const messages = document.getElementById("greenBotMessages");
+    <!-- Inside askGreeny() after you get data.recommendations -->
+const converter = new showdown.Converter(); // Markdown → HTML
+const botReply = converter.makeHtml(data.recommendations);
+
+messages.innerHTML += `<div style="margin:8px 0;text-align:left;">
+  <div style="background:#f9f9f9;padding:12px;border-radius:12px;
+              border:1px solid #ddd;box-shadow:0 2px 5px rgba(0,0,0,0.1);
+              max-width:90%;white-space:pre-wrap;">
+      ${botReply}
+  </div>
+</div>`;
+messages.scrollTop = messages.scrollHeight;
+
+    try {
+        // Example: you must already have prediction + inputs stored from your form
+        const res = await fetch("/get_recommendations", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                inputs: window.lastInputs || {},       // store inputs after predict
+                prediction: window.lastPrediction || 0, // store prediction label
+                probabilities: window.lastProbs || []  // store probabilities
+            })
+        });
+        const data = await res.json();
+
+        messages.innerHTML += `<div style="margin:5px 0;text-align:left;">
+            <span style="background:#f1f1f1;padding:8px 12px;border-radius:12px;display:inline-block;white-space:pre-wrap;">
+                ${data.recommendations}
+            </span></div>`;
+        messages.scrollTop = messages.scrollHeight;
+    } catch (err) {
+        messages.innerHTML += `<div style="margin:5px 0;text-align:left;color:red;">
+            Error: ${err.message}
+        </div>`;
+    }
+}
+    </script>
+</body>
+</html>
