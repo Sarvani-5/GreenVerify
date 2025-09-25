@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏢 GRIHA Green Rating Predictor</title>
-    <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -303,6 +302,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-top: 20px;
         }
 
         .recommendations-btn:hover {
@@ -316,75 +316,6 @@
             transform: none;
         }
 
-        .recommendations-section {
-            margin-top: 30px;
-            width: 100%;
-            grid-column: 1 / -1;
-        }
-
-        .recommendations-content {
-            max-height: 600px;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #e1e5e9;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .recommendations-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .recommendations-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .recommendations-content::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 4px;
-        }
-
-        .recommendations-content h1,
-        .recommendations-content h2,
-        .recommendations-content h3 {
-            color: #333;
-            margin: 15px 0 10px 0;
-        }
-
-        .recommendations-content strong {
-            color: #667eea;
-        }
-
-        .recommendations-content ul,
-        .recommendations-content ol {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-
-        .recommendations-content li {
-            margin: 5px 0;
-        }
-
-        .close-btn {
-            width: 100%;
-            padding: 12px 20px;
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            background: #5a6268;
-            transform: translateY(-1px);
-        }
-
         .status-message {
             text-align: center;
             padding: 15px;
@@ -393,6 +324,353 @@
             background: #d1edff;
             color: #004085;
             border: 1px solid #bee5eb;
+        }
+
+        /* GreenyBot Assessment Section */
+        .greenybot-section {
+            grid-column: span 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .greenybot-section {
+                grid-column: span 1;
+            }
+        }
+
+        .greenybot-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .greenybot-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .greenybot-title {
+            flex: 1;
+        }
+
+        .greenybot-title h2 {
+            font-size: 1.8rem;
+            color: #2e7d32;
+            margin: 0;
+        }
+
+        .greenybot-title p {
+            color: #666;
+            margin: 5px 0 0 0;
+            font-size: 0.95rem;
+        }
+
+        .assessment-content {
+            margin-bottom: 25px;
+        }
+
+        .assessment-item {
+            background: #f8fdf9;
+            border: 1px solid #e8f5e8;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .assessment-item:hover {
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .assessment-item h3 {
+            color: #2e7d32;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assessment-item .content {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .assessment-item .content p {
+            margin-bottom: 12px;
+        }
+
+        .assessment-item .content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .suggestion-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e8f5e8;
+        }
+
+        .suggestion-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .suggestion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .suggestion-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-text {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Enhanced Chatbot Styles */
+        .chatbot-launcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-launcher:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
+
+        .chatbot-widget {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 400px;
+            max-height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9998;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: #4CAF50;
+            border-radius: 3px;
+        }
+
+        .message {
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e1e5e9;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            margin: 4px 8px;
+        }
+
+        .chatbot-input-area {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e1e5e9;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .chatbot-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-widget {
+                right: 10px;
+                bottom: 80px;
+                width: calc(100vw - 20px);
+                max-width: 380px;
+            }
+
+            .chatbot-launcher {
+                right: 10px;
+                bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -427,7 +705,7 @@
                                             {% endfor %}
                                         </select>
                                     {% else %}
-                                        <input type="number" step="any" name="{{ feature }}" id="{{ feature }}" 
+                                        <input type="number" step="any" min="0" name="{{ feature }}" id="{{ feature }}" 
                                                placeholder="Enter {{ feature.replace('_', ' ').title() }}" value="0">
                                     {% endif %}
                                 </div>
@@ -461,10 +739,8 @@
                             <div id="probabilityList"></div>
                         </div>
 
-                        <!-- GreenyBot Recommendations Button -->
-                        <button id="getRecommendationsBtn" class="recommendations-btn" style="margin-top: 25px;">
-                            <span id="recBtnText"><i class="fas fa-robot"></i> Get GreenyBot Recommendations</span>
-                            <span id="recBtnLoading" class="hidden"><span class="loading"></span> GreenyBot is thinking...</span>
+                        <button class="recommendations-btn" id="getRecommendationsBtn" onclick="getRecommendations()">
+                            <i class="fas fa-robot"></i> Get GreenyBot Assessment
                         </button>
                     </div>
 
@@ -475,71 +751,100 @@
                         Fill in the building details and click "Predict" to see your GRIHA rating assessment.
                     </div>
                 </div>
-            </div>
 
-            <!-- GreenyBot Recommendations Modal/Section -->
-            <div id="recommendationsSection" class="recommendations-section hidden">
-                <div class="form-card">
-                    <h2 class="form-title">
-                        <i class="fas fa-robot"></i>
-                        GreenyBot Recommendations
-                    </h2>
-                    <div id="recommendationsContent" class="recommendations-content">
-                        <!-- AI recommendations will be displayed here -->
+                <!-- GreenyBot Assessment Section -->
+                <div class="greenybot-section hidden" id="greenybotSection">
+                    <div class="greenybot-header">
+                        <div class="greenybot-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="greenybot-title">
+                            <h2>GreenyBot Assessment</h2>
+                            <p>Expert analysis of your GRIHA rating with personalized recommendations</p>
+                        </div>
                     </div>
-                    <button id="closeRecommendations" class="close-btn">
-                        <i class="fas fa-times"></i> Close Recommendations
-                    </button>
+
+                    <div class="assessment-content" id="assessmentContent">
+                        <div class="loading-text">
+                            <i class="fas fa-spinner fa-spin"></i> GreenyBot is analyzing your building...
+                        </div>
+                    </div>
+
+                    <div class="suggestion-buttons" id="suggestionButtons">
+                        <button class="suggestion-btn" onclick="getSection('strengths')">
+                            <i class="fas fa-thumbs-up"></i> Key Strengths
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('improvements')">
+                            <i class="fas fa-tools"></i> Areas for Improvement
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('benefits')">
+                            <i class="fas fa-star"></i> Benefits of Improvement
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('next_steps')">
+                            <i class="fas fa-list-check"></i> Next Steps
+                        </button>
+                    </div>
                 </div>
             </div>
         {% else %}
             <div class="alert alert-error">
                 <i class="fas fa-exclamation-triangle"></i>
-                Error: Could not load the model. Please ensure 'green_building.csv' exists and is accessible.
+                Error: Could not load the model. Please ensure model files exist and are accessible.
             </div>
         {% endif %}
     </div>
-    <!-- Floating GreenyBot Widget -->
-<div id="greenBotWidget" style="
-    position: fixed; bottom: 20px; right: 20px;
-    width: 350px; max-height: 500px;
-    background: white; border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    display: none; flex-direction: column; overflow: hidden;
-    z-index: 9999; font-family: 'Segoe UI', sans-serif;">
-    
-    <div style="background: linear-gradient(135deg,#667eea,#764ba2); color:white; padding:10px; font-weight:600; display:flex; justify-content:space-between; align-items:center;">
-        🌱 GreenyBot
-        <button onclick="toggleGreeny()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">×</button>
-    </div>
-    
-    <div id="greenBotMessages" style="flex:1; padding:10px; overflow-y:auto; font-size:0.9rem;"></div>
-    
-    <div style="padding:10px; display:flex; gap:5px; border-top:1px solid #ddd;">
-        <input type="text" id="greenBotInput" placeholder="Ask about your rating..." 
-               style="flex:1; padding:8px; border:1px solid #ccc; border-radius:8px;">
-        <button onclick="askGreeny()" 
-                style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">
-            Send
-        </button>
-    </div>
-</div>
 
-<!-- Floating Button -->
-<button onclick="toggleGreeny()" style="
-    position: fixed; bottom: 20px; right: 20px;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    color: white; border: none; border-radius: 50%;
-    width: 60px; height: 60px; font-size: 1.5rem; cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999;">💬</button>
+    <!-- Enhanced Chatbot Widget for additional queries -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-comments"></i> Ask GreenyBot</h3>
+            <button class="chatbot-close" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-content">
+                    <strong>GreenyBot</strong><br>
+                    Ask me any specific questions about your GRIHA rating, sustainability improvements, or green building practices!
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" id="chatbotInput" 
+                   placeholder="Ask about your GRIHA rating..." 
+                   onkeypress="handleChatbotKeyPress(event)">
+            <button class="chatbot-send" id="chatbotSend" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chatbot Launcher Button -->
+    <button class="chatbot-launcher" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </button>
 
     <script>
-        let currentInputs = {};
-        let currentPrediction = null;
-        let currentProbabilities = [];
+        let currentSessionId = null;
+        let chatbotOpen = false;
 
+        // Form submission with negative value prevention
         document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Validate for negative values
+            const formData = new FormData(this);
+            for (let [key, value] of formData.entries()) {
+                const input = document.getElementById(key);
+                if (input && input.type === 'number' && parseFloat(value) < 0) {
+                    alert(`${key.replace('_', ' ').title()} cannot be negative. Please enter a positive value.`);
+                    input.focus();
+                    return;
+                }
+            }
             
             const predictBtn = document.getElementById('predictBtn');
             const btnText = document.getElementById('btnText');
@@ -547,19 +852,14 @@
             const results = document.getElementById('results');
             const alerts = document.getElementById('alerts');
             const placeholder = document.getElementById('placeholder');
+            const greenybotSection = document.getElementById('greenybotSection');
             
             // Show loading state
             predictBtn.disabled = true;
             btnText.classList.add('hidden');
             btnLoading.classList.remove('hidden');
             alerts.innerHTML = '';
-            
-            // Store form data for GreenyBot
-            const formData = new FormData(this);
-            currentInputs = {};
-            for (let [key, value] of formData.entries()) {
-                currentInputs[key] = value;
-            }
+            greenybotSection.classList.add('hidden');
             
             try {
                 const response = await fetch('/predict', {
@@ -575,10 +875,9 @@
                     </div>`;
                     results.classList.add('hidden');
                     placeholder.style.display = 'block';
+                    currentSessionId = null;
                 } else if (data.success) {
-                    // Store prediction data for GreenyBot
-                    currentPrediction = data.prediction;
-                    currentProbabilities = data.probabilities;
+                    currentSessionId = data.session_id;
                     
                     // Show results
                     const rating = parseInt(data.prediction);
@@ -613,12 +912,14 @@
                     results.classList.remove('hidden');
                     results.classList.add('fade-in');
                     placeholder.style.display = 'none';
+                    
                 } else if (data.error) {
                     alerts.innerHTML = `<div class="alert alert-error fade-in">
                         <i class="fas fa-times-circle"></i> ${data.error}
                     </div>`;
                     results.classList.add('hidden');
                     placeholder.style.display = 'block';
+                    currentSessionId = null;
                 }
             } catch (error) {
                 alerts.innerHTML = `<div class="alert alert-error fade-in">
@@ -626,6 +927,7 @@
                 </div>`;
                 results.classList.add('hidden');
                 placeholder.style.display = 'block';
+                currentSessionId = null;
             }
             
             // Reset button state
@@ -634,132 +936,294 @@
             btnLoading.classList.add('hidden');
         });
 
-        // GreenyBot Recommendations
-        document.getElementById('getRecommendationsBtn').addEventListener('click', async function(e) {
-            e.preventDefault();
+        // Get GreenyBot recommendations
+        async function getRecommendations() {
+            if (!currentSessionId) {
+                alert('Please get a prediction first!');
+                return;
+            }
             
-            const recBtn = document.getElementById('getRecommendationsBtn');
-            const recBtnText = document.getElementById('recBtnText');
-            const recBtnLoading = document.getElementById('recBtnLoading');
-            const recommendationsSection = document.getElementById('recommendationsSection');
-            const recommendationsContent = document.getElementById('recommendationsContent');
+            const btn = document.getElementById('getRecommendationsBtn');
+            const greenybotSection = document.getElementById('greenybotSection');
+            const assessmentContent = document.getElementById('assessmentContent');
             
-            // Show loading state
-            recBtn.disabled = true;
-            recBtnText.classList.add('hidden');
-            recBtnLoading.classList.remove('hidden');
+            btn.innerHTML = '<span class="loading"></span> Getting Assessment...';
+            btn.disabled = true;
+            
+            // Show the GreenyBot section
+            greenybotSection.classList.remove('hidden');
+            greenybotSection.classList.add('fade-in');
+            
+            // Scroll to the assessment section
+            setTimeout(() => {
+                greenybotSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
             
             try {
-                const response = await fetch('/get_recommendations', {
+                const response = await fetch('/get_initial_assessment', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        inputs: currentInputs,
-                        prediction: currentPrediction,
-                        probabilities: currentProbabilities
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: currentSessionId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Clean and format the assessment text
+                    const cleanedAssessment = cleanMarkdownText(data.assessment);
+                    
+                    assessmentContent.innerHTML = `
+                        <div class="assessment-item">
+                            <h3><i class="fas fa-info-circle"></i> Why This Rating?</h3>
+                            <div class="content">${cleanedAssessment}</div>
+                        </div>
+                    `;
+                } else {
+                    assessmentContent.innerHTML = `
+                        <div class="assessment-item">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Assessment Error</h3>
+                            <div class="content">Unable to generate assessment. Please try again later.</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                assessmentContent.innerHTML = `
+                    <div class="assessment-item">
+                        <h3><i class="fas fa-times-circle"></i> Network Error</h3>
+                        <div class="content">Failed to get assessment: ${error.message}</div>
+                    </div>
+                `;
+            }
+            
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Assessment Complete';
+            btn.disabled = false;
+        }
+
+        // Get section details
+        async function getSection(sectionType) {
+            if (!currentSessionId) {
+                alert('Please get a prediction first!');
+                return;
+            }
+            
+            const buttons = document.querySelectorAll('.suggestion-btn');
+            const clickedButton = event.target.closest('.suggestion-btn');
+            const originalText = clickedButton.innerHTML;
+            
+            clickedButton.innerHTML = '<span class="loading"></span> Loading...';
+            clickedButton.disabled = true;
+            
+            // Disable all buttons during loading
+            buttons.forEach(btn => btn.disabled = true);
+            
+            try {
+                const response = await fetch('/get_section', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        session_id: currentSessionId,
+                        section_type: sectionType 
                     })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Format and display recommendations
-                    const formattedRecommendations = formatMarkdownToHTML(data.recommendations);
-                    recommendationsContent.innerHTML = formattedRecommendations;
+                    const sectionTitles = {
+                        'strengths': 'Key Strengths',
+                        'improvements': 'Areas for Improvement', 
+                        'benefits': 'Benefits of Improvement',
+                        'next_steps': 'Next Steps'
+                    };
                     
-                    // Show recommendations section
-                    recommendationsSection.classList.remove('hidden');
-                    recommendationsSection.classList.add('fade-in');
+                    const sectionIcons = {
+                        'strengths': 'fas fa-thumbs-up',
+                        'improvements': 'fas fa-tools',
+                        'benefits': 'fas fa-star',
+                        'next_steps': 'fas fa-list-check'
+                    };
                     
-                    // Scroll to recommendations
-                    recommendationsSection.scrollIntoView({ behavior: 'smooth' });
+                    // Clean and format the content
+                    const cleanedContent = cleanMarkdownText(data.content);
+                    
+                    // Add or update the section in assessment content
+                    const assessmentContent = document.getElementById('assessmentContent');
+                    const existingSection = document.getElementById(`section-${sectionType}`);
+                    
+                    const newSectionHTML = `
+                        <div class="assessment-item fade-in" id="section-${sectionType}">
+                            <h3><i class="${sectionIcons[sectionType]}"></i> ${sectionTitles[sectionType]}</h3>
+                            <div class="content">${cleanedContent}</div>
+                        </div>
+                    `;
+                    
+                    if (existingSection) {
+                        existingSection.outerHTML = newSectionHTML;
+                    } else {
+                        assessmentContent.innerHTML += newSectionHTML;
+                    }
+                    
+                    // Scroll to the new section
+                    setTimeout(() => {
+                        document.getElementById(`section-${sectionType}`).scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }, 100);
+                    
                 } else {
-                    alert('GreenyBot Error: ' + data.error);
+                    alert('Failed to get section details. Please try again.');
                 }
             } catch (error) {
-                alert('Network error: ' + error.message);
+                alert('Error getting section details: ' + error.message);
             }
             
-            // Reset button state
-            recBtn.disabled = false;
-            recBtnText.classList.remove('hidden');
-            recBtnLoading.classList.add('hidden');
-        });
-
-        // Close recommendations
-        document.getElementById('closeRecommendations').addEventListener('click', function() {
-            document.getElementById('recommendationsSection').classList.add('hidden');
-        });
-
-        // Simple markdown to HTML formatter
-        function formatMarkdownToHTML(text) {
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/###\s+(.*?)$/gm, '<h3>$1</h3>')
-                .replace(/##\s+(.*?)$/gm, '<h2>$1</h2>')
-                .replace(/#\s+(.*?)$/gm, '<h1>$1</h1>')
-                .replace(/^\- (.*?)$/gm, '<li>$1</li>')
-                .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-                .replace(/\n/g, '<br>');
+            // Reset all buttons
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                if (btn === clickedButton) {
+                    btn.innerHTML = originalText;
+                }
+            });
         }
-        function toggleGreeny() {
-    const widget = document.getElementById("greenBotWidget");
-    const launcher = document.getElementById("greenBotLauncher");
-    
-    if (widget.style.display === "none" || widget.style.display === "") {
-        widget.style.display = "flex";
-        launcher.style.display = "none"; // hide 💬 button
-    } else {
-        widget.style.display = "none";
-        launcher.style.display = "block"; // show 💬 button again
-    }
-}
 
-async function askGreeny() {
-    const input = document.getElementById("greenBotInput");
-    const msg = input.value.trim();
-    if (!msg) return;
-    const messages = document.getElementById("greenBotMessages");
-    <!-- Inside askGreeny() after you get data.recommendations -->
-const converter = new showdown.Converter(); // Markdown → HTML
-const botReply = converter.makeHtml(data.recommendations);
+        // Clean markdown text and format properly
+        function cleanMarkdownText(text) {
+            if (!text) return '';
+            
+            // Remove markdown formatting symbols
+            let cleaned = text
+                .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')  // Bold italic
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')              // Bold
+                .replace(/\*([^*]+)\*/g, '<em>$1</em>')                          // Italic
+                .replace(/###\s*([^\n]+)/g, '<h4>$1</h4>')                       // H4 headings
+                .replace(/##\s*([^\n]+)/g, '<h3>$1</h3>')                        // H3 headings
+                .replace(/#\s*([^\n]+)/g, '<h2>$1</h2>')                         // H2 headings
+                .replace(/^\d+\.\s+(.+)$/gm, '<p><strong>$1</strong></p>')       // Numbered lists
+                .replace(/^-\s+(.+)$/gm, '<p>• $1</p>')                         // Bullet points
+                .replace(/^\*\s+(.+)$/gm, '<p>• $1</p>')                        // Bullet points
+                .replace(/\n\n+/g, '</p><p>')                                    // Paragraphs
+                .replace(/\n/g, '<br>')                                          // Line breaks
+                .trim();
+            
+            // Wrap in paragraph tags if not already wrapped
+            if (!cleaned.startsWith('<')) {
+                cleaned = '<p>' + cleaned + '</p>';
+            }
+            
+            // Clean up empty paragraphs and extra breaks
+            cleaned = cleaned
+                .replace(/<p><\/p>/g, '')
+                .replace(/<p><br>/g, '<p>')
+                .replace(/<br><\/p>/g, '</p>')
+                .replace(/<br><br>/g, '<br>');
+            
+            return cleaned;
+        }
 
-messages.innerHTML += `<div style="margin:8px 0;text-align:left;">
-  <div style="background:#f9f9f9;padding:12px;border-radius:12px;
-              border:1px solid #ddd;box-shadow:0 2px 5px rgba(0,0,0,0.1);
-              max-width:90%;white-space:pre-wrap;">
-      ${botReply}
-  </div>
-</div>`;
-messages.scrollTop = messages.scrollHeight;
+        // Chatbot functions for additional queries
+        function toggleChatbot() {
+            const widget = document.getElementById('chatbotWidget');
+            chatbotOpen = !chatbotOpen;
+            widget.style.display = chatbotOpen ? 'flex' : 'none';
+            
+            if (chatbotOpen) {
+                document.getElementById('chatbotInput').focus();
+            }
+        }
 
-    try {
-        // Example: you must already have prediction + inputs stored from your form
-        const res = await fetch("/get_recommendations", {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({
-                inputs: window.lastInputs || {},       // store inputs after predict
-                prediction: window.lastPrediction || 0, // store prediction label
-                probabilities: window.lastProbs || []  // store probabilities
-            })
+        function handleChatbotKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        async function sendChatMessage() {
+            if (!currentSessionId) {
+                addBotMessage("Error", "Please get a GRIHA rating prediction first before asking questions!");
+                return;
+            }
+
+            const input = document.getElementById('chatbotInput');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            input.value = '';
+            
+            // Add user message
+            addUserMessage(question);
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        question: question
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const cleanedResponse = cleanMarkdownText(data.response);
+                    addBotMessage("GreenyBot", cleanedResponse);
+                } else {
+                    addBotMessage("Error", data.error || "Sorry, I couldn't process your question.");
+                }
+            } catch (error) {
+                addBotMessage("Error", "Network error: " + error.message);
+            }
+        }
+
+        function addUserMessage(message) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-time">${now}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addBotMessage(title, content) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <strong>${title}</strong><br>
+                    ${content}
+                </div>
+                <div class="message-time">${now}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Prevent negative values in number inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                if (parseFloat(this.value) < 0) {
+                    this.value = 0;
+                    this.style.borderColor = '#ff4757';
+                    setTimeout(() => {
+                        this.style.borderColor = '#e1e5e9';
+                    }, 1000);
+                }
+            });
         });
-        const data = await res.json();
-
-        messages.innerHTML += `<div style="margin:5px 0;text-align:left;">
-            <span style="background:#f1f1f1;padding:8px 12px;border-radius:12px;display:inline-block;white-space:pre-wrap;">
-                ${data.recommendations}
-            </span></div>`;
-        messages.scrollTop = messages.scrollHeight;
-    } catch (err) {
-        messages.innerHTML += `<div style="margin:5px 0;text-align:left;color:red;">
-            Error: ${err.message}
-        </div>`;
-    }
-}
     </script>
 </body>
 </html>
