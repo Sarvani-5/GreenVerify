@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>GreenVerify</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/styles.css">
@@ -77,10 +78,717 @@
                                                    placeholder="0.00" value="0">
                                             <span class="input-unit">units</span>
                                         </div>
+=======
+    <title>🏢 GRIHA Green Rating Predictor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .form-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .form-grid::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .predict-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .prediction-result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #4CAF50;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stars {
+            font-size: 3rem;
+            margin: 15px 0;
+            color: #FFD700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .probabilities {
+            margin-top: 25px;
+        }
+
+        .probability-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .probability-item:last-child {
+            border-bottom: none;
+        }
+
+        .probability-bar {
+            width: 60%;
+            height: 6px;
+            background: #e1e5e9;
+            border-radius: 3px;
+            margin-left: 10px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d1edff;
+            color: #004085;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recommendations-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .recommendations-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .recommendations-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #d1edff;
+            color: #004085;
+            border: 1px solid #bee5eb;
+        }
+
+        /* GreenyBot Assessment Section */
+        .greenybot-section {
+            grid-column: span 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .greenybot-section {
+                grid-column: span 1;
+            }
+        }
+
+        .greenybot-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .greenybot-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .greenybot-title {
+            flex: 1;
+        }
+
+        .greenybot-title h2 {
+            font-size: 1.8rem;
+            color: #2e7d32;
+            margin: 0;
+        }
+
+        .greenybot-title p {
+            color: #666;
+            margin: 5px 0 0 0;
+            font-size: 0.95rem;
+        }
+
+        .assessment-content {
+            margin-bottom: 25px;
+        }
+
+        .assessment-item {
+            background: #f8fdf9;
+            border: 1px solid #e8f5e8;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .assessment-item:hover {
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .assessment-item h3 {
+            color: #2e7d32;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assessment-item .content {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .assessment-item .content p {
+            margin-bottom: 12px;
+        }
+
+        .assessment-item .content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .suggestion-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e8f5e8;
+        }
+
+        .suggestion-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .suggestion-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .suggestion-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-text {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Enhanced Chatbot Styles */
+        .chatbot-launcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-launcher:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
+
+        .chatbot-widget {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 400px;
+            max-height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9998;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: #4CAF50;
+            border-radius: 3px;
+        }
+
+        .message {
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e1e5e9;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            margin: 4px 8px;
+        }
+
+        .chatbot-input-area {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e1e5e9;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .chatbot-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chatbot-send {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-widget {
+                right: 10px;
+                bottom: 80px;
+                width: calc(100vw - 20px);
+                max-width: 380px;
+            }
+
+            .chatbot-launcher {
+                right: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-building"></i> GRIHA Green Rating Predictor</h1>
+            <p>Predict building sustainability ratings from 1 to 5 stars</p>
+        </div>
+
+        {% if model and feature_names %}
+            <div class="status-message">
+                <i class="fas fa-check-circle"></i> {{ train_status }}
+            </div>
+
+            <div class="main-content">
+                <div class="form-card">
+                    <h2 class="form-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Building Details
+                    </h2>
+                    <form id="predictionForm">
+                        <div class="form-grid">
+                            {% for feature in feature_names %}
+                                <div class="input-group">
+                                    <label for="{{ feature }}">{{ feature.replace('_', ' ').title() }}</label>
+                                    {% if feature in label_encoders %}
+                                        <select name="{{ feature }}" id="{{ feature }}" required>
+                                            <option value="">Select {{ feature.replace('_', ' ').title() }}</option>
+                                            {% for option in label_encoders[feature].classes_ %}
+                                                <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% else %}
+                                        <input type="number" step="any" min="0" name="{{ feature }}" id="{{ feature }}" 
+                                               placeholder="Enter {{ feature.replace('_', ' ').title() }}" value="0">
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                                     {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
+<<<<<<< HEAD
                         
                         <button type="submit" class="btn-primary" id="predictBtn">
                             <span class="btn-content" id="btnText">
@@ -91,10 +799,16 @@
                                 <span class="spinner"></span>
                                 <span>Processing...</span>
                             </span>
+=======
+                        <button type="submit" class="predict-btn" id="predictBtn">
+                            <span id="btnText"><i class="fas fa-magic"></i> Predict GRIHA Rating</span>
+                            <span id="btnLoading" class="hidden"><span class="loading"></span> Predicting...</span>
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                         </button>
                     </form>
                 </div>
 
+<<<<<<< HEAD
                 <!-- Results Section -->
                 <div class="glass-card results-section">
                     <div class="card-header">
@@ -138,11 +852,37 @@
                         <button class="btn-secondary" id="getRecommendationsBtn" onclick="getRecommendations()">
                             <i class="fas fa-robot"></i>
                             <span>Get AI Assessment</span>
+=======
+                <div class="results-card">
+                    <h2 class="results-title">
+                        <i class="fas fa-chart-line"></i>
+                        Assessment Results
+                    </h2>
+                    
+                    <div id="results" class="hidden">
+                        <div class="prediction-result" id="predictionText"></div>
+                        <div class="stars" id="starsDisplay"></div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceBar" style="width: 0%"></div>
+                        </div>
+                        <small id="confidenceText">Confidence: 0%</small>
+                        
+                        <div class="probabilities">
+                            <h3 style="margin-bottom: 15px; color: #555;">
+                                <i class="fas fa-percentage"></i> Probability Breakdown
+                            </h3>
+                            <div id="probabilityList"></div>
+                        </div>
+
+                        <button class="recommendations-btn" id="getRecommendationsBtn" onclick="getRecommendations()">
+                            <i class="fas fa-robot"></i> Get GreenyBot Assessment
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                         </button>
                     </div>
 
                     <div id="alerts"></div>
                     
+<<<<<<< HEAD
                     <div id="placeholder" class="placeholder-state">
                         <div class="placeholder-icon">
                             <i class="fas fa-chart-bar"></i>
@@ -188,18 +928,63 @@
                         <button class="action-btn" onclick="getSection('next_steps')">
                             <i class="fas fa-route"></i>
                             <span>Next Steps</span>
+=======
+                    <div id="placeholder" style="color: #999; font-style: italic; margin-top: 50px;">
+                        <i class="fas fa-info-circle"></i><br>
+                        Fill in the building details and click "Predict" to see your GRIHA rating assessment.
+                    </div>
+                </div>
+
+                <!-- GreenyBot Assessment Section -->
+                <div class="greenybot-section hidden" id="greenybotSection">
+                    <div class="greenybot-header">
+                        <div class="greenybot-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="greenybot-title">
+                            <h2>GreenyBot Assessment</h2>
+                            <p>Expert analysis of your GRIHA rating with personalized recommendations</p>
+                        </div>
+                    </div>
+
+                    <div class="assessment-content" id="assessmentContent">
+                        <div class="loading-text">
+                            <i class="fas fa-spinner fa-spin"></i> GreenyBot is analyzing your building...
+                        </div>
+                    </div>
+
+                    <div class="suggestion-buttons" id="suggestionButtons">
+                        <button class="suggestion-btn" onclick="getSection('strengths')">
+                            <i class="fas fa-thumbs-up"></i> Key Strengths
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('improvements')">
+                            <i class="fas fa-tools"></i> Areas for Improvement
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('benefits')">
+                            <i class="fas fa-star"></i> Benefits of Improvement
+                        </button>
+                        <button class="suggestion-btn" onclick="getSection('next_steps')">
+                            <i class="fas fa-list-check"></i> Next Steps
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                         </button>
                     </div>
                 </div>
             </div>
         {% else %}
+<<<<<<< HEAD
             <div class="error-banner">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Error: Could not load the model. Please ensure model files exist and are accessible.</span>
+=======
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                Error: Could not load the model. Please ensure model files exist and are accessible.
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
             </div>
         {% endif %}
     </div>
 
+<<<<<<< HEAD
     <!-- Chatbot Widget -->
     <div class="chatbot-widget" id="chatbotWidget">
         <div class="chat-header">
@@ -212,10 +997,18 @@
                 <span>Online</span>
             </div>
             <button class="chat-close" onclick="toggleChatbot()">
+=======
+    <!-- Enhanced Chatbot Widget for additional queries -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-comments"></i> Ask GreenyBot</h3>
+            <button class="chatbot-close" onclick="toggleChatbot()">
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
+<<<<<<< HEAD
         <div class="chat-messages" id="chatbotMessages">
             <div class="message bot">
                 <div class="message-avatar">
@@ -224,25 +1017,446 @@
                 <div class="message-content">
                     <strong>GreenyBot</strong>
                     <p>Ask me anything about your GRIHA rating, sustainability improvements, or green building practices!</p>
+=======
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-content">
+                    <strong>GreenyBot</strong><br>
+                    Ask me any specific questions about your GRIHA rating, sustainability improvements, or green building practices!
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                 </div>
             </div>
         </div>
         
+<<<<<<< HEAD
         <div class="chat-input-area">
             <input type="text" class="chat-input" id="chatbotInput" 
                    placeholder="Type your question..." 
                    onkeypress="handleChatbotKeyPress(event)">
             <button class="chat-send" id="chatbotSend" onclick="sendChatMessage()">
+=======
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" id="chatbotInput" 
+                   placeholder="Ask about your GRIHA rating..." 
+                   onkeypress="handleChatbotKeyPress(event)">
+            <button class="chatbot-send" id="chatbotSend" onclick="sendChatMessage()">
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
     </div>
 
+<<<<<<< HEAD
     <button class="chat-fab" onclick="toggleChatbot()">
         <i class="fas fa-comments"></i>
         <span class="notification-badge">1</span>
     </button>
 
     <script src="static/js/script.js"></script>
+=======
+    <!-- Chatbot Launcher Button -->
+    <button class="chatbot-launcher" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script>
+        let currentSessionId = null;
+        let chatbotOpen = false;
+
+        // Form submission with negative value prevention
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate for negative values
+            const formData = new FormData(this);
+            for (let [key, value] of formData.entries()) {
+                const input = document.getElementById(key);
+                if (input && input.type === 'number' && parseFloat(value) < 0) {
+                    alert(`${key.replace('_', ' ').title()} cannot be negative. Please enter a positive value.`);
+                    input.focus();
+                    return;
+                }
+            }
+            
+            const predictBtn = document.getElementById('predictBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const results = document.getElementById('results');
+            const alerts = document.getElementById('alerts');
+            const placeholder = document.getElementById('placeholder');
+            const greenybotSection = document.getElementById('greenybotSection');
+            
+            // Show loading state
+            predictBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            alerts.innerHTML = '';
+            greenybotSection.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.warning) {
+                    alerts.innerHTML = `<div class="alert alert-warning fade-in">
+                        <i class="fas fa-exclamation-triangle"></i> ${data.message}
+                    </div>`;
+                    results.classList.add('hidden');
+                    placeholder.style.display = 'block';
+                    currentSessionId = null;
+                } else if (data.success) {
+                    currentSessionId = data.session_id;
+                    
+                    // Show results
+                    const rating = parseInt(data.prediction);
+                    const stars = '⭐'.repeat(rating);
+                    
+                    document.getElementById('predictionText').textContent = `Rating: ${rating} Stars`;
+                    document.getElementById('starsDisplay').textContent = stars;
+                    
+                    const confidence = (data.confidence * 100).toFixed(1);
+                    document.getElementById('confidenceBar').style.width = confidence + '%';
+                    document.getElementById('confidenceText').textContent = `Confidence: ${confidence}%`;
+                    
+                    // Show probability breakdown
+                    const probabilityList = document.getElementById('probabilityList');
+                    probabilityList.innerHTML = '';
+                    
+                    data.probabilities.forEach(prob => {
+                        const percentage = (prob.probability * 100).toFixed(1);
+                        const stars = '⭐'.repeat(parseInt(prob.label));
+                        
+                        probabilityList.innerHTML += `
+                            <div class="probability-item">
+                                <span>${stars} ${prob.label} Stars</span>
+                                <div class="probability-bar">
+                                    <div class="probability-fill" style="width: ${percentage}%"></div>
+                                </div>
+                                <span>${percentage}%</span>
+                            </div>
+                        `;
+                    });
+                    
+                    results.classList.remove('hidden');
+                    results.classList.add('fade-in');
+                    placeholder.style.display = 'none';
+                    
+                } else if (data.error) {
+                    alerts.innerHTML = `<div class="alert alert-error fade-in">
+                        <i class="fas fa-times-circle"></i> ${data.error}
+                    </div>`;
+                    results.classList.add('hidden');
+                    placeholder.style.display = 'block';
+                    currentSessionId = null;
+                }
+            } catch (error) {
+                alerts.innerHTML = `<div class="alert alert-error fade-in">
+                    <i class="fas fa-times-circle"></i> Network error: ${error.message}
+                </div>`;
+                results.classList.add('hidden');
+                placeholder.style.display = 'block';
+                currentSessionId = null;
+            }
+            
+            // Reset button state
+            predictBtn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        });
+
+        // Get GreenyBot recommendations
+        async function getRecommendations() {
+            if (!currentSessionId) {
+                alert('Please get a prediction first!');
+                return;
+            }
+            
+            const btn = document.getElementById('getRecommendationsBtn');
+            const greenybotSection = document.getElementById('greenybotSection');
+            const assessmentContent = document.getElementById('assessmentContent');
+            
+            btn.innerHTML = '<span class="loading"></span> Getting Assessment...';
+            btn.disabled = true;
+            
+            // Show the GreenyBot section
+            greenybotSection.classList.remove('hidden');
+            greenybotSection.classList.add('fade-in');
+            
+            // Scroll to the assessment section
+            setTimeout(() => {
+                greenybotSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+            
+            try {
+                const response = await fetch('/get_initial_assessment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: currentSessionId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Clean and format the assessment text
+                    const cleanedAssessment = cleanMarkdownText(data.assessment);
+                    
+                    assessmentContent.innerHTML = `
+                        <div class="assessment-item">
+                            <h3><i class="fas fa-info-circle"></i> Why This Rating?</h3>
+                            <div class="content">${cleanedAssessment}</div>
+                        </div>
+                    `;
+                } else {
+                    assessmentContent.innerHTML = `
+                        <div class="assessment-item">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Assessment Error</h3>
+                            <div class="content">Unable to generate assessment. Please try again later.</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                assessmentContent.innerHTML = `
+                    <div class="assessment-item">
+                        <h3><i class="fas fa-times-circle"></i> Network Error</h3>
+                        <div class="content">Failed to get assessment: ${error.message}</div>
+                    </div>
+                `;
+            }
+            
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Assessment Complete';
+            btn.disabled = false;
+        }
+
+        // Get section details
+        async function getSection(sectionType) {
+            if (!currentSessionId) {
+                alert('Please get a prediction first!');
+                return;
+            }
+            
+            const buttons = document.querySelectorAll('.suggestion-btn');
+            const clickedButton = event.target.closest('.suggestion-btn');
+            const originalText = clickedButton.innerHTML;
+            
+            clickedButton.innerHTML = '<span class="loading"></span> Loading...';
+            clickedButton.disabled = true;
+            
+            // Disable all buttons during loading
+            buttons.forEach(btn => btn.disabled = true);
+            
+            try {
+                const response = await fetch('/get_section', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        session_id: currentSessionId,
+                        section_type: sectionType 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const sectionTitles = {
+                        'strengths': 'Key Strengths',
+                        'improvements': 'Areas for Improvement', 
+                        'benefits': 'Benefits of Improvement',
+                        'next_steps': 'Next Steps'
+                    };
+                    
+                    const sectionIcons = {
+                        'strengths': 'fas fa-thumbs-up',
+                        'improvements': 'fas fa-tools',
+                        'benefits': 'fas fa-star',
+                        'next_steps': 'fas fa-list-check'
+                    };
+                    
+                    // Clean and format the content
+                    const cleanedContent = cleanMarkdownText(data.content);
+                    
+                    // Add or update the section in assessment content
+                    const assessmentContent = document.getElementById('assessmentContent');
+                    const existingSection = document.getElementById(`section-${sectionType}`);
+                    
+                    const newSectionHTML = `
+                        <div class="assessment-item fade-in" id="section-${sectionType}">
+                            <h3><i class="${sectionIcons[sectionType]}"></i> ${sectionTitles[sectionType]}</h3>
+                            <div class="content">${cleanedContent}</div>
+                        </div>
+                    `;
+                    
+                    if (existingSection) {
+                        existingSection.outerHTML = newSectionHTML;
+                    } else {
+                        assessmentContent.innerHTML += newSectionHTML;
+                    }
+                    
+                    // Scroll to the new section
+                    setTimeout(() => {
+                        document.getElementById(`section-${sectionType}`).scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }, 100);
+                    
+                } else {
+                    alert('Failed to get section details. Please try again.');
+                }
+            } catch (error) {
+                alert('Error getting section details: ' + error.message);
+            }
+            
+            // Reset all buttons
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                if (btn === clickedButton) {
+                    btn.innerHTML = originalText;
+                }
+            });
+        }
+
+        // Clean markdown text and format properly
+        function cleanMarkdownText(text) {
+            if (!text) return '';
+            
+            // Remove markdown formatting symbols
+            let cleaned = text
+                .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')  // Bold italic
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')              // Bold
+                .replace(/\*([^*]+)\*/g, '<em>$1</em>')                          // Italic
+                .replace(/###\s*([^\n]+)/g, '<h4>$1</h4>')                       // H4 headings
+                .replace(/##\s*([^\n]+)/g, '<h3>$1</h3>')                        // H3 headings
+                .replace(/#\s*([^\n]+)/g, '<h2>$1</h2>')                         // H2 headings
+                .replace(/^\d+\.\s+(.+)$/gm, '<p><strong>$1</strong></p>')       // Numbered lists
+                .replace(/^-\s+(.+)$/gm, '<p>• $1</p>')                         // Bullet points
+                .replace(/^\*\s+(.+)$/gm, '<p>• $1</p>')                        // Bullet points
+                .replace(/\n\n+/g, '</p><p>')                                    // Paragraphs
+                .replace(/\n/g, '<br>')                                          // Line breaks
+                .trim();
+            
+            // Wrap in paragraph tags if not already wrapped
+            if (!cleaned.startsWith('<')) {
+                cleaned = '<p>' + cleaned + '</p>';
+            }
+            
+            // Clean up empty paragraphs and extra breaks
+            cleaned = cleaned
+                .replace(/<p><\/p>/g, '')
+                .replace(/<p><br>/g, '<p>')
+                .replace(/<br><\/p>/g, '</p>')
+                .replace(/<br><br>/g, '<br>');
+            
+            return cleaned;
+        }
+
+        // Chatbot functions for additional queries
+        function toggleChatbot() {
+            const widget = document.getElementById('chatbotWidget');
+            chatbotOpen = !chatbotOpen;
+            widget.style.display = chatbotOpen ? 'flex' : 'none';
+            
+            if (chatbotOpen) {
+                document.getElementById('chatbotInput').focus();
+            }
+        }
+
+        function handleChatbotKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        async function sendChatMessage() {
+            if (!currentSessionId) {
+                addBotMessage("Error", "Please get a GRIHA rating prediction first before asking questions!");
+                return;
+            }
+
+            const input = document.getElementById('chatbotInput');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            input.value = '';
+            
+            // Add user message
+            addUserMessage(question);
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        question: question
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const cleanedResponse = cleanMarkdownText(data.response);
+                    addBotMessage("GreenyBot", cleanedResponse);
+                } else {
+                    addBotMessage("Error", data.error || "Sorry, I couldn't process your question.");
+                }
+            } catch (error) {
+                addBotMessage("Error", "Network error: " + error.message);
+            }
+        }
+
+        function addUserMessage(message) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-time">${now}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addBotMessage(title, content) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <strong>${title}</strong><br>
+                    ${content}
+                </div>
+                <div class="message-time">${now}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Prevent negative values in number inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                if (parseFloat(this.value) < 0) {
+                    this.value = 0;
+                    this.style.borderColor = '#ff4757';
+                    setTimeout(() => {
+                        this.style.borderColor = '#e1e5e9';
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+>>>>>>> b86e96d8266fb55f532729ed3aad3840f581a7d2
 </body>
 </html>
