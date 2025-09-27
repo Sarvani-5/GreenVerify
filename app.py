@@ -6,41 +6,52 @@ import joblib
 import os
 import google.generativeai as genai
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Configure Google Gemini AI
-GEMINI_API_KEY = "AIzaSyA49YQ1ZwIGQp0tMdaouunx9A04F9Qn2O0"  # Move to environment variable in production
-genai.configure(api_key=GEMINI_API_KEY)
+# Configure Google Gemini AI from environment variable
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Initialize Gemini model with correct model name
-try:
-    # Try different model names that are commonly available
-    model_names = [
-        'gemini-2.5-flash',
-    ]
-    
-    gemini_model = None
+if not GEMINI_API_KEY:
+    print("Warning: GEMINI_API_KEY not found in environment variables")
     gemini_available = False
-    
-    for model_name in model_names:
-        try:
-            gemini_model = genai.GenerativeModel(model_name)
-            # Test the model with a simple query
-            test_response = gemini_model.generate_content("Test")
-            gemini_available = True
-            print(f"Successfully initialized Gemini model: {model_name}")
-            break
-        except Exception as model_error:
-            print(f"Failed to initialize {model_name}: {model_error}")
-            continue
-    
-    if not gemini_available:
-        print("Warning: No Gemini models available")
+else:
+    genai.configure(api_key=GEMINI_API_KEY)
+
+    # Initialize Gemini model with correct model name
+    try:
+        # Try different model names that are commonly available
+        model_names = [
+            'gemini-2.5-flash',
+            'gemini-1.5-flash',
+            'gemini-pro'
+        ]
         
-except Exception as e:
-    print(f"Warning: Gemini AI initialization failed: {e}")
-    gemini_available = False
+        gemini_model = None
+        gemini_available = False
+        
+        for model_name in model_names:
+            try:
+                gemini_model = genai.GenerativeModel(model_name)
+                # Test the model with a simple query
+                test_response = gemini_model.generate_content("Test")
+                gemini_available = True
+                print(f"Successfully initialized Gemini model: {model_name}")
+                break
+            except Exception as model_error:
+                print(f"Failed to initialize {model_name}: {model_error}")
+                continue
+        
+        if not gemini_available:
+            print("Warning: No Gemini models available")
+            
+    except Exception as e:
+        print(f"Warning: Gemini AI initialization failed: {e}")
+        gemini_available = False
 
 # ---------------------------
 # Load Existing Model Files
@@ -545,5 +556,9 @@ def health_check():
         'timestamp': datetime.now().isoformat()
     })
 
+# For Vercel deployment
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
+
+# Export the Flask app for Vercel
+app = app
