@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenVerify</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="leaf leaf-1"></div>
+        <div class="leaf leaf-2"></div>
+        <div class="leaf leaf-3"></div>
+        <div class="leaf leaf-4"></div>
+    </div>
+
+    <div class="container">
+        <!-- Enhanced Header -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-hexagon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Green Verify - GRIHA Rating Predictor</h1>
+                    <p>Sustainable Building Intelligence Platform</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <i class="fas fa-building"></i>
+                    <span>Smart Analysis</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Powered</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-leaf"></i>
+                    <span>Eco Certified</span>
+                </div>
+            </div>
+        </header>
+
+        {% if model and feature_names %}
+            <div class="main-grid">
+                <!-- Input Form Section -->
+                <div class="glass-card form-section">
+                    <div class="card-header">
+                        <div class="icon-badge">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h2>Building Parameters</h2>
+                        <span class="badge">Input Data</span>
+                    </div>
+                    
+                    <form id="predictionForm">
+                        <div class="form-scroll">
+                            {% for feature in feature_names %}
+                                <div class="form-group">
+                                    <label>{{ feature.replace('_', ' ').title() }}</label>
+                                    {% if feature in label_encoders %}
+                                        <div class="select-wrapper">
+                                            <select name="{{ feature }}" id="{{ feature }}" required>
+                                                <option value="">Select Option</option>
+                                                {% for option in label_encoders[feature].classes_ %}
+                                                    <option value="{{ option }}">{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                    {% else %}
+                                        <div class="input-wrapper">
+                                            <input type="number" step="any" min="0" name="{{ feature }}" id="{{ feature }}" 
+                                                   placeholder="0.00" value="0">
+                                            <span class="input-unit">units</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="predictBtn">
+                            <span class="btn-content" id="btnText">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                <span>Analyze Building</span>
+                            </span>
+                            <span class="btn-loading hidden" id="btnLoading">
+                                <span class="spinner"></span>
+                                <span>Processing...</span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="glass-card results-section">
+                    <div class="card-header">
+                        <div class="icon-badge">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h2>Assessment Dashboard</h2>
+                        <span class="badge">Results</span>
+                    </div>
+                    
+                    <div id="results" class="hidden">
+                        <div class="rating-display">
+                            <div class="rating-circle">
+                                <svg class="progress-ring" width="200" height="200">
+                                    <circle class="progress-ring-bg" cx="100" cy="100" r="85"></circle>
+                                    <circle class="progress-ring-fill" cx="100" cy="100" r="85" id="progressCircle"></circle>
+                                </svg>
+                                <div class="rating-content">
+                                    <div class="rating-number" id="predictionText">0</div>
+                                    <div class="rating-label">STARS</div>
+                                </div>
+                            </div>
+                            <div class="stars-display" id="starsDisplay"></div>
+                        </div>
+
+                        <div class="confidence-section">
+                            <div class="confidence-header">
+                                <span>Confidence Level</span>
+                                <span id="confidenceText">0%</span>
+                            </div>
+                            <div class="confidence-track">
+                                <div class="confidence-progress" id="confidenceBar"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="probabilities-section">
+                            <h3><i class="fas fa-chart-line"></i> Probability Distribution</h3>
+                            <div id="probabilityList" class="probability-grid"></div>
+                        </div>
+
+                        <button class="btn-secondary" id="getRecommendationsBtn" onclick="getRecommendations()">
+                            <i class="fas fa-robot"></i>
+                            <span>Get AI Assessment</span>
+                        </button>
+                    </div>
+
+                    <div id="alerts"></div>
+                    
+                    <div id="placeholder" class="placeholder-state">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Ready for Analysis</h3>
+                        <p>Enter building parameters and click "Analyze Building" to receive your GRIHA rating assessment</p>
+                    </div>
+                </div>
+
+                <!-- GreenyBot Assessment -->
+                <div class="glass-card greenybot-section hidden" id="greenybotSection">
+                    <div class="greenybot-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                            <span class="pulse-ring"></span>
+                        </div>
+                        <div class="header-content">
+                            <h2>GreenyBot Analysis</h2>
+                            <p>AI-Powered Sustainability Insights</p>
+                        </div>
+                    </div>
+
+                    <div class="assessment-grid" id="assessmentContent">
+                        <div class="loading-state">
+                            <div class="loader-ring"></div>
+                            <p>Analyzing your building data...</p>
+                        </div>
+                    </div>
+
+                    <div class="action-grid" id="suggestionButtons">
+                        <button class="action-btn" onclick="getSection('strengths')">
+                            <i class="fas fa-trophy"></i>
+                            <span>Key Strengths</span>
+                        </button>
+                        <button class="action-btn" onclick="getSection('improvements')">
+                            <i class="fas fa-tools"></i>
+                            <span>Improvements</span>
+                        </button>
+                        <button class="action-btn" onclick="getSection('benefits')">
+                            <i class="fas fa-gem"></i>
+                            <span>Benefits</span>
+                        </button>
+                        <button class="action-btn" onclick="getSection('next_steps')">
+                            <i class="fas fa-route"></i>
+                            <span>Next Steps</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="error-banner">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Error: Could not load the model. Please ensure model files exist and are accessible.</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chat-header">
+            <div class="chat-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="chat-title">
+                <h4>GreenyBot Assistant</h4>
+                <span class="status-dot"></span>
+                <span>Online</span>
+            </div>
+            <button class="chat-close" onclick="toggleChatbot()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <strong>GreenyBot</strong>
+                    <p>Ask me anything about your GRIHA rating, sustainability improvements, or green building practices!</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatbotInput" 
+                   placeholder="Type your question..." 
+                   onkeypress="handleChatbotKeyPress(event)">
+            <button class="chat-send" id="chatbotSend" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <button class="chat-fab" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+        <span class="notification-badge">1</span>
+    </button>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>
