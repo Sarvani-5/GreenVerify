@@ -222,7 +222,6 @@ def get_initial_assessment(user_inputs, prediction_rating):
             building_details.append(f"- {clean_feature}: {value}")
         
         building_info = "\n".join(building_details)
-        
         prompt = f"""
 You are GreenyBot, an expert AI assistant specializing in GRIHA (Green Rating for Integrated Habitat Assessment) green building certification in India.
 
@@ -230,6 +229,14 @@ BUILDING ASSESSMENT RESULTS:
 - Predicted GRIHA Rating: {prediction_rating} Stars (out of 5)
 - Building Details:
 {building_info}
+
+FEATURE CONTEXT:
+The following features use 0 and 1 values to indicate their presence:
+- Waste_Management: 0 means not present, 1 means present
+- Social_Benefits: 0 means not present, 1 means present
+- VOC/Lead Free Paints: 0 means not present, 1 means present
+- Air_Pollution_Control: 0 means not present, 1 means present
+Other features have numeric values indicating performance levels.
 
 GRIHA RATING CONTEXT:
 - 1 Star: Basic compliance with minimal green features
@@ -242,7 +249,6 @@ Please provide ONLY the "Why This Rating?" section. Explain why the building rec
 
 Format your response as plain text without any markdown formatting, emojis, or special characters.
 """
-
         response = gemini_model.generate_content(prompt)
         return response.text if response and response.text else get_fallback_assessment(user_inputs, prediction_rating)
 
@@ -298,7 +304,7 @@ Explain the benefits of implementing green building improvements for this {predi
 Building Details:
 {building_info}
 
-Provide clear, actionable benefits.
+Provide clear,concise and  actionable benefits.
 """,
             'next_steps': f"""
 Provide 3-4 immediate actionable steps that the building owner can take to improve their {prediction_rating} star GRIHA rating. Make these steps practical, prioritized, and feasible.
@@ -379,7 +385,6 @@ def get_chat_response(user_inputs, prediction_rating, question):
             building_details.append(f"- {clean_feature}: {value}")
         
         building_info = "\n".join(building_details)
-        
         prompt = f"""
 You are GreenyBot, an expert AI assistant specializing in GRIHA green building certification in India.
 
@@ -389,15 +394,17 @@ CONTEXT:
 
 USER QUESTION: {question}
 
-Please provide a helpful, informative response related to the building's GRIHA rating and sustainability features. Be specific and reference the building's current details when relevant. Keep responses concise and practical.
+Your Task:
+- Act as a GRIHA expert and provide accurate, clear, and practical information about the GRIHA rating system, its criteria, benefits, processes, and sustainability measures.
+- Only use the building-specific context (rating or details) if the user explicitly asks about that building; otherwise provide general GRIHA-related information.
+- Keep responses concise and practical.
 
 After your main response, suggest 3 relevant follow-up questions that the user might want to ask, formatted as:
 FOLLOW_UP_QUESTIONS:
 1. [Question 1]
-2. [Question 2] 
+2. [Question 2]
 3. [Question 3]
 """
-
         response = gemini_model.generate_content(prompt)
         if not response or not response.text:
             return {
